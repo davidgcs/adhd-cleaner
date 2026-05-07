@@ -15,8 +15,8 @@ export function completeTaskAndAward(data: AppData, task: Task) {
   ).length;
   const bonusApplied = completedToday + 1 >= 3 ? 10 : 0;
   const lastCompletionDay = data.gamification.lastCompletionDay;
-  const wasYesterday =
-    lastCompletionDay && sameDay(lastCompletionDay, plusDays(new Date(today), -1).toISOString());
+  const yesterdayIso = plusDays(new Date(), -1).toISOString();
+  const wasYesterday = lastCompletionDay && sameDay(lastCompletionDay, yesterdayIso);
   const currentStreak = lastCompletionDay
     ? sameDay(lastCompletionDay, today)
       ? data.gamification.currentStreak
