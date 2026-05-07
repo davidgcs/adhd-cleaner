@@ -160,7 +160,7 @@ export default function App() {
 
   const completeTask = (task: Task) => {
     setData((previous) => {
-      const { updatedGamification, bonusApplied, pointsAwarded } = completeTaskAndAward(previous, task);
+      const { updatedGamification: gamification, bonusApplied, pointsAwarded } = completeTaskAndAward(previous, task);
       const execution: TaskExecution = {
         id: createId(),
         taskId: task.id,
@@ -181,7 +181,7 @@ export default function App() {
             : existingTask,
         ),
         executions: [...previous.executions, execution],
-        gamification: updatedGamification,
+        gamification,
       };
     });
   };

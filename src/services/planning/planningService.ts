@@ -23,13 +23,20 @@ function scoreTask(task: Task, now: Date, settings: AppSettings): number {
 
 export function getRecommendedTasks(
   tasks: Task[],
-  _executions: TaskExecution[],
+  executions: TaskExecution[],
   settings: AppSettings,
   now: Date,
 ): Task[] {
   const activeTasks = tasks.filter((task) => task.isActive);
+  const completedTodayTaskIds = new Set(
+    executions
+      .filter((execution) => execution.status === "completed" && startOfDayIso(new Date(execution.completedAt)) === startOfDayIso(now))
+      .map((execution) => execution.taskId),
+  );
   const limit = Math.max(3, Math.min(5, settings.maxDailyRecommendations));
-  const sorted = activeTasks.sort((a, b) => scoreTask(b, now, settings) - scoreTask(a, now, settings));
+  const sorted = activeTasks
+    .filter((task) => !completedTodayTaskIds.has(task.id))
+    .sort((a, b) => scoreTask(b, now, settings) - scoreTask(a, now, settings));
 
   const selected: Task[] = [];
   let hardCount = 0;
