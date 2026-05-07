@@ -1,5 +1,11 @@
+let localCounter = 0;
+
 export function createId(): string {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+  localCounter += 1;
+  return `${Date.now()}-${localCounter}`;
 }
 
 export function startOfDayIso(date: Date): string {

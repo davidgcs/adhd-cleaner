@@ -50,11 +50,15 @@ export default function App() {
   const [newReminderTitle, setNewReminderTitle] = useState("");
 
   useEffect(() => {
-    void (async () => {
-      const loaded = await loadAppData();
-      setData(loaded);
-      setIsLoading(false);
-    })();
+    const initialize = async () => {
+      try {
+        const loaded = await loadAppData();
+        setData(loaded);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    void initialize();
   }, []);
 
   useEffect(() => {
