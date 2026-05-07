@@ -58,7 +58,9 @@ export default function App() {
         setIsLoading(false);
       }
     };
-    void initialize();
+    initialize().catch(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -97,6 +99,14 @@ export default function App() {
         return accumulator;
       }, {}),
     [data.rooms],
+  );
+  const taskMap = useMemo(
+    () =>
+      data.tasks.reduce<Record<string, Task>>((accumulator, task) => {
+        accumulator[task.id] = task;
+        return accumulator;
+      }, {}),
+    [data.tasks],
   );
 
   if (isLoading) {
@@ -398,7 +408,7 @@ export default function App() {
             <Text style={styles.sectionTitle}>Detalle del día</Text>
             {selectedDayExecutions.map((execution) => (
               <View key={execution.id} style={styles.item}>
-                <Text>{data.tasks.find((task) => task.id === execution.taskId)?.title ?? "Tarea"}</Text>
+                <Text>{taskMap[execution.taskId]?.title ?? "Tarea"}</Text>
                 <Text>
                   Estado: {execution.status} · Puntos: {execution.pointsAwarded + execution.bonusApplied}
                 </Text>

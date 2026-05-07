@@ -1,11 +1,7 @@
-let localCounter = 0;
+import { v4 as uuidv4 } from "uuid";
 
 export function createId(): string {
-  if (typeof globalThis.crypto?.randomUUID === "function") {
-    return globalThis.crypto.randomUUID();
-  }
-  localCounter += 1;
-  return `${Date.now()}-${localCounter}`;
+  return uuidv4();
 }
 
 export function startOfDayIso(date: Date): string {
